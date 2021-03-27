@@ -7,7 +7,7 @@
    python train.py --model [str] --log [str] --lr [float] --momentum [float] --weight [float] --epoch [int] --train_batch_size [int] --eval_batch_size [int]
    ```
 
-There are 3 types of comparable model, {BaselineModel, EmbeddingModel, MlpModel}, {Cnn, EmbeddingCnn, AbpCnn} and {Vgg16, Vgg16_bn, EmbeddingVgg16, EmbeddingVgg16_bn, AbpVgg16, AbpVgg16bn}.
+There are 3 types of comparable model, {BaselineModel, EmbeddingModel, MlpModel}, {Cnn, EmbeddingCnn, AbpCnn} and {Vgg16, Vgg16_bn, EmbeddingVgg16, EmbeddingVgg16_bn, AbpVgg16, AbpVgg16bn}. {*Model} and {*Cnn} is trained on MNIST, and {*VGG} on CIFAR-10.
 
 1. train BaselineModel
     ```
