@@ -81,16 +81,16 @@ class Conv2d(nn.Module):
                         self.padding, self.dilation, self.groups)
 
     def another_backward(self, another_grad, grad):
-        weight = Parameter(torch.zeros_like(self.weight).copy_(self.weight.data))
-        with torch.enable_grad():
-            another_grad.requires_grad_(False)
-            _grad = F.conv2d(another_grad, weight, None, self.stride,
-                             self.padding, self.dilation, self.groups)
-            out = _grad * grad.data
-            out.sum().backward()
-        self.another_weight_grad = weight.grad.data.clone()
+        # weight = Parameter(torch.zeros_like(self.weight).copy_(self.weight.data))
+        # with torch.enable_grad():
+        #     another_grad.requires_grad_(False)
+        #     _grad = F.conv2d(another_grad, weight, None, self.stride,
+        #                      self.padding, self.dilation, self.groups)
+        #     out = _grad * grad.data
+        #     out.sum().backward()
+        # self.another_weight_grad = weight.grad.data.clone()
 
-        # # this weight could contain any random data, just need the same shape as self.weight
+        # this weight could contain any random data, just need the same shape as self.weight
         # weight = Parameter(torch.zeros_like(self.weight))
         # with torch.enable_grad():
         #     out = F.conv2d(another_grad, weight, None, self.stride,
@@ -98,8 +98,17 @@ class Conv2d(nn.Module):
         #     out = out * grad.data
         #     out.sum().backward()
         # self.another_weight_grad = weight.grad.data.clone()
-        # _grad = F.conv2d(another_grad, self.weight.data, None, self.stride,
-        #                  self.padding, self.dilation, self.groups)
+
+        weight = Parameter(torch.zeros_like(self.weight).permute(1, 0, 2, 3))
+        with torch.enable_grad():
+            out = F.conv2d(grad.data, weight, None, self.stride,
+                           self.kernel_size[0] - 1 - self.padding[0], self.dilation, self.groups)
+            out = out * another_grad.data
+            out.sum().backward()
+        self.another_weight_grad = weight.grad.data.clone().permute(1, 0, 2, 3).flip(2, 3).contiguous()
+
+        _grad = F.conv2d(another_grad, self.weight.data, None, self.stride,
+                         self.padding, self.dilation, self.groups)
 
         return _grad.data.clone()
 
@@ -140,6 +149,18 @@ class AvgPool2d(nn.Module):
 
     def another_backward(self, another_grad):
         return self.pooling(another_grad)
+
+
+class GlobalAvgPool2d(nn.Module):
+    def __init__(self):
+        super(GlobalAvgPool2d, self).__init__()
+
+    def forward(self, x):
+        assert len(x.shape) == 4, f'Shape must match (n, c, h, w), but got shape {x.shape}'
+        return x.flatten(2).mean(dim=2)
+
+    def another_backward(self, another_grad):
+        return another_grad.flatten(2).mean(dim=2)
 
 
 class Dropout(nn.Module):

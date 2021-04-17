@@ -1,7 +1,7 @@
 from torchvision.datasets import MNIST, CIFAR10
 from torch.utils.data.dataloader import DataLoader
 from torchvision.transforms import Compose, ToTensor, Normalize, RandomCrop, RandomHorizontalFlip
-from models.model import BaselineModel, EmbeddingModel, MlpModel, Cnn, EmbeddingCnn, AbpCnn
+from models.model import BaselineModel, EmbeddingModel, MlpModel, Cnn, EmbeddingCnn, AbpCnn, AbpCnn6, Cnn6
 from models.vgg import Vgg16, Vgg16_bn, EmbeddingVgg16, EmbeddingVgg16_bn, AbpVgg16, AbpVgg16bn
 
 
@@ -84,6 +84,10 @@ def name2model_and_loader(modelname):
         model_loader = EmbeddingCnn(), get_data_loaders1, 0
     elif modelname == AbpCnn.__name__:
         model_loader = AbpCnn(), get_data_loaders1, 1
+    elif modelname == Cnn6.__name__:
+        model_loader = Cnn6(), get_data_loaders2, 0
+    elif modelname == AbpCnn6.__name__:
+        model_loader = AbpCnn6(), get_data_loaders2, 1
     elif modelname == Vgg16.__name__:
         model_loader = Vgg16(), get_data_loaders2, 0
     elif modelname == Vgg16_bn.__name__:

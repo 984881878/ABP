@@ -7,10 +7,14 @@ from util.utils import correct, name2model_and_loader
 from torch.utils.tensorboard import SummaryWriter
 
 
-def train(modelname, epoch, sub_dir, lr, momentum, weight, train_batch_size, eval_batch_size):
+def train(modelname, epoch, sub_dir, lr, momentum, weight, train_batch_size, eval_batch_size, use_wd):
     model, loader, is_abp = name2model_and_loader(modelname)
-    # model = model()
-    optimizer = SGD(model.parameters(), lr=lr, momentum=momentum)
+    weight_decay = 0
+    # if 'Vgg16' in modelname and 'Abp' not in modelname:
+    #     weight_decay = 5e-4
+    if use_wd:
+        weight_decay = 5e-4
+    optimizer = SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=weight_decay)
     train_criterion = nn.CrossEntropyLoss(reduction='mean')
     test_criterion = nn.CrossEntropyLoss(reduction='sum')
     train_loader, val_loader = loader(train_batch_size, eval_batch_size)
@@ -66,7 +70,7 @@ def train(modelname, epoch, sub_dir, lr, momentum, weight, train_batch_size, eva
         print('Epoch [{}], Evaluate accuracy {:.4f}'.format(e + 1, acc))
         if best_model_acc < acc:
             best_model_acc = acc
-            # uncomment following code to save the best checkpoint
+            # # uncomment the following code to save the best checkpoint
             # if best_model_path is not None:
             #     os.remove(best_model_path)
             # best_model_path = f'log/{model.__name__}/{sub_dir}/acc-{best_model_acc:.4f}-Epoch{e+1}.pth'
@@ -86,6 +90,7 @@ if __name__ == '__main__':
     parser.add_argument('--epoch', type=int, default=20)
     parser.add_argument('--train_batch_size', type=int, default=50)
     parser.add_argument('--eval_batch_size', type=int, default=500)
+    parser.add_argument('--use_wd', action='store_true', help='use weight decay')
     args = parser.parse_args()
 
     if args.log is None:
@@ -95,6 +100,6 @@ if __name__ == '__main__':
 
     train(
         args.model, args.epoch, args.log, args.lr, args.momentum, args.weight,
-        args.train_batch_size, args.eval_batch_size
+        args.train_batch_size, args.eval_batch_size, args.use_wd
     )
 
