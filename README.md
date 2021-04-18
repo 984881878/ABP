@@ -50,7 +50,7 @@ python train.py --log lr=0.09 --lr 0.09 --train_batch_size 64 --eval_batch_size 
 ```
 
 ### 0.4. Visualize Results
-refer to [results visualization](#Results)
+Refer to [results visualization](#Results).
 
 ## 1. Train model
    ```
