@@ -1,6 +1,6 @@
 # Another Back Propagation
 
-####This is a repository illustrating the another back propagation about its utility, reproducibility and superiority.
+###This is a repository illustrating the another back propagation about its utility, reproducibility and superiority.
 
 ## 0. Reproduce the experiment results
 Just run the following commands respectively.
