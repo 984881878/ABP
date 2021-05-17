@@ -11,6 +11,12 @@ python train.py --log 0 --model BaselineModel
 python train.py --log 0 --model EmbeddingModel
 python train.py --log 0 --model MlpModel --weight 0.4
 ```
+Train them with learning rate of 0.5, only abp with w of 0.1 works well:
+```
+python train.py --log lr=0.5 --lr 0.5 --model BaselineModel
+python train.py --log lr=0.5 --lr 0.5 --model EmbeddingModel
+python train.py --log lr=0.5 --lr 0.5 --model MlpModel --weight 0.1
+```
 
 ### 0.1. ConvNet for MNIST
 ```
@@ -27,6 +33,13 @@ python train.py --log epoch=50,w=0.9 --lr 0.05 --train_batch_size 64 --eval_batc
 python train.py --log epoch=50,w=0.8 --lr 0.05 --train_batch_size 64 --eval_batch_size 128 --epoch 50 --model AbpCnn --weight 0.8
 ```
 
+Train them with learning rate of 0.5, only abp with w of 0.1 works well:
+```
+python train.py --log lr=0.5 --lr 0.5 --train_batch_size 64 --eval_batch_size 128 --model Cnn
+python train.py --log lr=0.5 --lr 0.5 --train_batch_size 64 --eval_batch_size 128 --model EmbeddingCnn
+python train.py --log lr=0.5 --lr 0.5 --train_batch_size 64 --eval_batch_size 128 --model AbpCnn --weight 0.1
+```
+
 ### 0.2. VGG for Cifar-10
 ```
 python train.py --log use_wd --train_batch_size 128 --eval_batch_size 256 --lr 0.05 --epoch 100 --model Vgg16 --use_wd
@@ -41,6 +54,13 @@ python train.py --log no_wd  --train_batch_size 128 --eval_batch_size 256 --lr 0
 python train.py --log use_wd --train_batch_size 128 --eval_batch_size 256 --lr 0.05 --epoch 100 --model AbpVgg16 --use_wd --weight 0.1
 ```
 
+Train them with learning rate of 0.2, only abp with w of 0.1 works well:
+```
+python train.py --log use_wd_lr=0.2 --train_batch_size 128 --eval_batch_size 256 --lr 0.2 --epoch 100 --model Vgg16 --use_wd
+python train.py --log use_wd_lr=0.2 --train_batch_size 128 --eval_batch_size 256 --lr 0.2 --epoch 100 --model EmbeddingVgg16 --use_wd
+python train.py --log no_wd_lr=0.2  --train_batch_size 128 --eval_batch_size 256 --lr 0.2 --epoch 100 --model AbpVgg16 --weight 0.1
+```
+
 ### 0.3. More beyond papers
 These 3 commands show the robust of our ABP:
 ```
@@ -51,6 +71,9 @@ python train.py --log lr=0.09 --lr 0.09 --train_batch_size 64 --eval_batch_size 
 
 ### 0.4. Visualize Results
 Refer to [results visualization](#Results).
+
+### 0.5. Requirements
+Refer to [Requirements](#Requirements).
 
 ## 1. Train model
    ```
@@ -98,7 +121,7 @@ Refer to [results visualization](#Results).
 
 Adjust epoch, learning rate, momentum, batch size as you like.
 
-## 2. Requirements
+## <span id="Requirements">2. Requirements</span>
 pytorch >= 1.0
 
 tensorboard
